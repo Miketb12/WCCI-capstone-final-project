@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.codename_vp.serverside.Component.JwtTokenUtil;
+import com.codename_vp.serverside.Entity.LoginResponse;
 import com.codename_vp.serverside.Entity.User;
 import com.codename_vp.serverside.Service.LoginService;
 
@@ -19,11 +21,16 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @PostMapping
-    public ResponseEntity<User> loginUser(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody User user) {
         try {
             User loggedInUser = loginService.loginUser(user.getUserName(), user.getPassword());
-            return ResponseEntity.ok(loggedInUser);
+            String token = jwtTokenUtil.generateToken(loggedInUser.getUserName());
+            return ResponseEntity.ok(new LoginResponse(loggedInUser.getId(), loggedInUser.getUserName(),
+                    loggedInUser.getEmail(), token));
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).build();
         }

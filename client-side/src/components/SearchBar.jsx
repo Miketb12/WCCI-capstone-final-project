@@ -1,19 +1,16 @@
 // src/components/SearchBar.js
 
 import  { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { useNavigate } from 'react-router-dom';
 import './SearchBar.css';
 
 
-function SearchBar({onSearch}) {
+function SearchBar() {
   const [query, setQuery] = useState('');
  const navigate = useNavigate();
 
   const handleSearch = () => {
-    onSearch(query);
-    
     navigate(`/search-results?query=${encodeURIComponent(query)}`);
     
   };
@@ -38,11 +35,6 @@ function SearchBar({onSearch}) {
     </div>
   );
 }
-
-SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-};
-
 
 export default SearchBar;
 

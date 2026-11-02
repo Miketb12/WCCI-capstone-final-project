@@ -1,14 +1,16 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.3'
-	id 'io.spring.dependency-management' version '1.1.3'
+	id 'org.springframework.boot' version '4.1.2'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.codename_vp'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
@@ -16,16 +18,19 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'org.springframework.boot:spring-boot-starter-webservices'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.2' // Check for the latest version
-   	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2' // Check for the latest version
+	implementation 'io.jsonwebtoken:jjwt-api:0.13.0' // Check for the latest version
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0' // Check for the latest version
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0' // Check for the latest version
+	implementation 'org.springframework.security:spring-security-crypto'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	implementation 'mysql:mysql-connector-java:8.0.33'  // Adjust the version as needed
+	runtimeOnly 'com.mysql:mysql-connector-j' // Version managed by Spring Boot
 
 }
 

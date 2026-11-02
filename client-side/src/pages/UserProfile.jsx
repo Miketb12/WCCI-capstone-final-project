@@ -4,11 +4,12 @@ import RemoveFromWishlistButton from "../components/RemoveFromWishListButton";
 import RemoveFromOwnedListButton from "../components/RemoveFromOwnedListButton";
 import MoveToOwnedListButton from "../components/MoveToOwnedListButton";
 import "../components/Buttons.css";
+import { handleUnauthorized } from "../auth";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [expandedDescriptions, setExpandedDescriptions] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const userId = localStorage.getItem("userId");
 
   const onGameRemoved = (wishListId) => {
     console.log(`Removing game with wishListId: ${wishListId}`);
@@ -23,7 +24,6 @@ const UserProfile = () => {
     const localUserId = localStorage.getItem("userId");
 
     if (authToken) {
-      setUserId(localUserId);
       fetch(`http://localhost:7098/user/id/${localUserId}`, {
         method: "GET",
         headers: {
@@ -31,6 +31,9 @@ const UserProfile = () => {
         },
       })
         .then((response) => {
+          if (response.status === 401) {
+            handleUnauthorized();
+          }
           if (response.ok) {
             return response.json();
           } else {
@@ -104,7 +107,7 @@ const UserProfile = () => {
                         </Link>
                         {/* <p>Slug: {ownedItem.game.slug}</p> */}
                         <p>
-                          <b>Status:</b> {ownedItem.game.status}
+                          <b>Status:</b> Owned
                         </p>
                         {/* <p>Released Date: {ownedItem.game.released}</p> */}
                         <p>

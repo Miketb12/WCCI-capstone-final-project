@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codename_vp.serverside.Component.JwtTokenUtil;
 import com.codename_vp.serverside.Entity.AuthRequest;
+import com.codename_vp.serverside.Service.LoginService;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,10 +20,13 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private LoginService loginService;
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
-        // Authenticate the user (e.g., check credentials)
-        // If authentication is successful, generate a JWT token
+        // Throws a 401 or 404 response unless the credentials are valid
+        loginService.loginUser(authRequest.getUsername(), authRequest.getPassword());
         String token = jwtTokenUtil.generateToken(authRequest.getUsername());
         return ResponseEntity.ok(token);
     }

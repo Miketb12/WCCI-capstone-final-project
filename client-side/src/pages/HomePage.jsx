@@ -1,4 +1,3 @@
-import  { useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import NewReleases from '../components/NewReleases'
 import RandomGames from '../components/RandomGames';
@@ -7,17 +6,11 @@ import  SingleVideo from "./SingleVideo";
 
 const HomePage = () => {
 
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
   return (
     <div >
     <div className='container-home-page'>
       <div className="search-bar">
-      <SearchBar onSearch={handleSearch} /> 
+      <SearchBar />
       </div>
 
       <div className='video-1'>

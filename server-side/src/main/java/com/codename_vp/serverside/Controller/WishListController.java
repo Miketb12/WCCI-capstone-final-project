@@ -51,11 +51,5 @@ public class WishListController {
         }
     }
 
-    // Endpoint to remove a game from the wishlist
-    @DeleteMapping("wishlist/remove/{wishListId}")
-    public ResponseEntity<Void> removeFromWishList(@PathVariable Long userId, @PathVariable Long wishListId) {
-        wishListService.removeFromWishList(wishListId);
-        return ResponseEntity.noContent().build();
-    }
 
 }

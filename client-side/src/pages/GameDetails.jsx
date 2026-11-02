@@ -21,7 +21,6 @@ function GameInfoDetails() {
   useEffect(() => {
     const gameAPI = `http://localhost:7098/game/detail/${gameId}`;
     const videoAPI = `http://localhost:7098/game/video/${gameId}`;
-    console.log('user id:' + userId + "game id: " + gameId + "authToken: " + authToken)
     const fetchGameWithRetry = async () => {
       try {
         const response = await fetch(gameAPI);
@@ -75,7 +74,7 @@ function GameInfoDetails() {
 
     fetchGameWithRetry(MAX_RETRIES);
     fetchVideoUrl();
-  }, [gameId,authToken,userId]);
+  }, [gameId]);
 
   if (loading) {
     return <p>Loading...</p>;

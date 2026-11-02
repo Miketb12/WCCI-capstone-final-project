@@ -20,19 +20,11 @@ public class PlatformController {
     @Autowired
     PlatformService platformService;
 
-    @PostMapping("/platform/new")
-    public void addPlatform(@RequestBody Platform platform) {
-        this.platformService.addPlatform(platform);
-    }
 
     @GetMapping("/platform")
     public List<Platform> getPlatforms() {
         return this.platformService.getPlatforms();
     }
 
-    @DeleteMapping("platform/delete/{id}")
-    public void removePlatform(@PathVariable int id) {
-        this.platformService.removePlatform(id);
-    }
 
 }
