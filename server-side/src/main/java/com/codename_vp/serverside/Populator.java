@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.codename_vp.serverside.Entity.Game;
@@ -30,6 +31,9 @@ public class Populator implements CommandLineRunner {
     @Autowired
     private GameRepo gameRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void run(String... args) throws Exception {
 
         Set<Platform> platforms = new HashSet<Platform>();
@@ -37,15 +41,15 @@ public class Populator implements CommandLineRunner {
         List<Game> games = new ArrayList<>();
         System.out.println("Hello Populator\n");
 
-        User user1 = new User("abc123", "1234", "abc123@gmail.com ");
+        User user1 = new User("abc123", passwordEncoder.encode("1234"), "abc123@gmail.com ");
         userRepo.save(user1);
         users.add(0, user1);
 
-        User user2 = new User("def123", "1234", "def123@gmail.com ");
+        User user2 = new User("def123", passwordEncoder.encode("1234"), "def123@gmail.com ");
         userRepo.save(user2);
         users.add(1, user2);
 
-        User user3 = new User("hijk123", "1234", "hijk123@gmail.com");
+        User user3 = new User("hijk123", passwordEncoder.encode("1234"), "hijk123@gmail.com");
         userRepo.save(user3);
         users.add(2, user3);
 

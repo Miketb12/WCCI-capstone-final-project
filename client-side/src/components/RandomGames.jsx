@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Slider from "react-slick"; // Import the Slider component
+import Slider from "./Slider"; // Import the Slider component
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./Carousel.css";
@@ -71,7 +71,7 @@ function RandomGames() {
           // Handle cases where the response is unexpected
           throw new Error(`Unexpected API response for gameId ${gameId}`);
         }
-      } catch (error) {
+      } catch {
         // Retry fetching with a new random gameId if retries remain
         if (retries > 0) {
           const newGameId = getRandomGameId();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./GameVideo.css";
 
 function GameVideo() {
@@ -6,8 +6,8 @@ function GameVideo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchVideoForRandomGames = async () => {
-    try {
+  useEffect(() => {
+    const fetchVideoForRandomGames = async () => {
       const maxRetries = 10;
       const numVideosToFetch = 1;
       const fetchedVideos = [];
@@ -39,16 +39,13 @@ function GameVideo() {
         fetchedVideos.push(videoUrl);
       }
 
-      setVideoUrls(fetchedVideos);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
-      setLoading(false);
-    }
-  };
+      return fetchedVideos;
+    };
 
-  useEffect(() => {
-    fetchVideoForRandomGames();
+    fetchVideoForRandomGames()
+      .then(setVideoUrls)
+      .catch(setError)
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {

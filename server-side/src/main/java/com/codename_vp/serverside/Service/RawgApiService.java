@@ -1,11 +1,12 @@
 package com.codename_vp.serverside.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,13 +19,16 @@ import com.codename_vp.serverside.Entity.WishList;
 import com.codename_vp.serverside.Repository.GameRepo;
 import com.codename_vp.serverside.Repository.PlatformRepo;
 import com.codename_vp.serverside.Repository.WishListRepo;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class RawgApiService {
     private final String apiUrl = "https://api.rawg.io/api/";
-    private final String apiKey = "1901610f1cec450d8b9ff6e0306f934a";
+
+    @Value("${rawg.api.key}")
+    private String apiKey;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -50,27 +54,34 @@ public class RawgApiService {
     @Autowired
     private GameService gameService;
 
+    // RAWG repeats the API key in its paging links, so strip it before responding
+    private ResponseEntity<String> fetchFromRawg(String url, Object... uriVariables) {
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class, uriVariables);
+        String body = response.getBody() == null ? "" : response.getBody().replace(apiKey, "");
+        return ResponseEntity.status(response.getStatusCode()).contentType(MediaType.APPLICATION_JSON).body(body);
+    }
+
     public ResponseEntity<String> getGameDetailById(Long game_id) {
 
         String url = apiUrl + "/games/" + game_id + "?key=" + apiKey;
 
-        return restTemplate.getForEntity(url, String.class);
+        return fetchFromRawg(url);
     }
 
     public ResponseEntity<String> searchGameByName(String query) {
-        String url = apiUrl + "/games?key=" + apiKey + "&search=" + query;
-        return restTemplate.getForEntity(url, String.class);
+        String url = apiUrl + "/games?key=" + apiKey + "&search={query}";
+        return fetchFromRawg(url, query);
     }
 
     public ResponseEntity<String> getTop10Games() {
         String url = apiUrl + "/games?key=" + apiKey + "&ordering=-rating&page_size=10&metacritic=100";
 
-        return restTemplate.getForEntity(url, String.class);
+        return fetchFromRawg(url);
     }
 
     public ResponseEntity<String> getTrailerVideo(int gameId) {
         String url = apiUrl + "/games/" + gameId + "/movies?key=" + apiKey;
-        return restTemplate.getForEntity(url, String.class);
+        return fetchFromRawg(url);
     }
 
     public ResponseEntity<String> getNewReleaseGames() {
@@ -83,7 +94,7 @@ public class RawgApiService {
         // Construct the URL with the "dates" parameter
         String url = apiUrl + "/games?key=" + apiKey + "&ordering=-added&page_size=20&dates=" + dateRange;
 
-        return restTemplate.getForEntity(url, String.class);
+        return fetchFromRawg(url);
     }
 
     public OwnedList addToOwnedList(Long gameId, Long userId) {
@@ -119,13 +130,13 @@ public class RawgApiService {
                 Game game = new Game();
 
                 game.setId(jsonNode.get("id").asLong());
-                game.setName(jsonNode.get("name").asText());
-                game.setSlug(jsonNode.get("slug").asText());
+                game.setName(jsonNode.get("name").asString());
+                game.setSlug(jsonNode.get("slug").asString());
                 game.setStatus("Owned");
-                game.setOfficialSite(jsonNode.get("website").asText());
-                game.setDescription(jsonNode.get("description").asText());
-                game.setReleased(jsonNode.get("released").asText());
-                game.setImgUrl(jsonNode.get("background_image").asText());
+                game.setOfficialSite(jsonNode.get("website").asString());
+                game.setDescription(jsonNode.get("description").asString());
+                game.setReleased(jsonNode.get("released").asString());
+                game.setImgUrl(jsonNode.get("background_image").asString());
 
                 Set<Platform> platformSet = new HashSet<>();
                 JsonNode platformsNode = jsonNode.get("platforms");
@@ -136,8 +147,8 @@ public class RawgApiService {
                         if (platformNode != null) {
                             Platform platform = new Platform();
                             platform.setPlatformId(platformNode.get("id").asInt());
-                            platform.setPlatformName(platformNode.get("name").asText());
-                            platform.setSlug(platformNode.get("slug").asText());
+                            platform.setPlatformName(platformNode.get("name").asString());
+                            platform.setSlug(platformNode.get("slug").asString());
 
                             platformSet.add(platform);
                             this.platformRepo.save(platform);
@@ -158,7 +169,7 @@ public class RawgApiService {
 
                 return ownedList;
 
-            } catch (IOException e) {
+            } catch (JacksonException e) {
                 e.printStackTrace();
                 return null;
             }
@@ -185,13 +196,13 @@ public class RawgApiService {
                 Game game = new Game();
 
                 game.setId(jsonNode.get("id").asLong());
-                game.setName(jsonNode.get("name").asText());
-                game.setSlug(jsonNode.get("slug").asText());
+                game.setName(jsonNode.get("name").asString());
+                game.setSlug(jsonNode.get("slug").asString());
                 game.setStatus("Wish");
-                game.setOfficialSite(jsonNode.get("website").asText());
-                game.setDescription(jsonNode.get("description").asText());
-                game.setReleased(jsonNode.get("released").asText());
-                game.setImgUrl(jsonNode.get("background_image").asText());
+                game.setOfficialSite(jsonNode.get("website").asString());
+                game.setDescription(jsonNode.get("description").asString());
+                game.setReleased(jsonNode.get("released").asString());
+                game.setImgUrl(jsonNode.get("background_image").asString());
 
                 // Add platforms to the wish list
                 Set<Platform> platformSet = new HashSet<>();
@@ -203,8 +214,8 @@ public class RawgApiService {
                         if (platformNode != null) {
                             Platform platform = new Platform();
                             platform.setPlatformId(platformNode.get("id").asInt());
-                            platform.setPlatformName(platformNode.get("name").asText());
-                            platform.setSlug(platformNode.get("slug").asText());
+                            platform.setPlatformName(platformNode.get("name").asString());
+                            platform.setSlug(platformNode.get("slug").asString());
 
                             platformSet.add(platform);
                             this.platformRepo.save(platform);
@@ -224,7 +235,7 @@ public class RawgApiService {
 
                 return wishList;
 
-            } catch (IOException e) {
+            } catch (JacksonException e) {
                 e.printStackTrace();
                 return null;
             }

@@ -7,44 +7,42 @@ import SearchBar from '../components/SearchBar';
 import { Link } from 'react-router-dom';
 
 function SearchResults( ) {
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [result, setResult] = useState({ query: null, results: [], error: null });
   
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
-
+  const isCurrent = result.query === query;
+  const loading = Boolean(query) && !isCurrent;
+  const error = isCurrent ? result.error : null;
+  const searchResults = isCurrent ? result.results : [];
 
   useEffect(() => {
-    
-    console.log("Query: "+ query);
-    if (query) {
-      setLoading(true); // Set loading to true before making the API request.
-      setError(null); // Reset error state.
-
-      axios.get(`http://localhost:7098/game/search?query=${query}`)
-        .then((response) => {
-          setSearchResults(response.data.results);
-        })
-        .catch((error) => {
-          setError(error); // Set error state if the request fails.
-        })
-        .finally(() => {
-          setLoading(false); // Set loading to false after the request, regardless of success or failure.
-        });
+    if (!query) {
+      return;
     }
+    let ignore = false; // Drop the response if a newer search has started.
+
+    axios.get(`http://localhost:7098/game/search?query=${encodeURIComponent(query)}`)
+      .then((response) => {
+        if (!ignore) {
+          setResult({ query, results: response.data.results, error: null });
+        }
+      })
+      .catch((error) => {
+        if (!ignore) {
+          setResult({ query, results: [], error });
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
   }, [query]);
 
   return (
     <div>
       <div className="search-bar">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar />
       </div>
       <div className="search-results-container">
         <h3 style={{ color: 'gold', marginBottom: '30px', marginTop: '30px'}}>Search Results:</h3>

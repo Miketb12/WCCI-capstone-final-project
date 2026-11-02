@@ -44,10 +44,6 @@ public class UserController {
         return this.userService.getUserByUserName(username);
     }
 
-    @GetMapping("/user/users")
-    public List<User> findUsers() {
-        return this.userService.getAllUsers();
-    }
 
     @PostMapping("/user/id/{userId}/add-game-to-wish-list/{gameId}")
     public User addGameToWishList(@PathVariable Long userId, @PathVariable Long gameId) {

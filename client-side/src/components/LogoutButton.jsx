@@ -1,6 +1,3 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
 const buttonStyle = {
   backgroundColor: "transparent",
   border: "none",
@@ -10,8 +7,9 @@ const buttonStyle = {
   width: "135px",
 };
 
+const hoverColor = "gold";
+
 const LogoutButton = () => {
-  const navigate = useNavigate();
   const handleLogout = () => {
     // Perform logout logic here, such as clearing user data from localStorage
     localStorage.removeItem("authToken");
@@ -21,8 +19,8 @@ const LogoutButton = () => {
   };
 
   const handleMouseEnter = (event) => {
-    // Apply hover style when the mouse enters the button
-    event.target.style = hoverStyle;
+    // Apply hover color when the mouse enters the button
+    event.target.style.color = hoverColor;
   };
 
   const handleMouseLeave = (event) => {

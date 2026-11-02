@@ -14,6 +14,7 @@ const SignupPage = () => {
       // Perform client-side validation
       if (password !== confirmPassword) {
         console.error('Passwords do not match');
+        alert('Passwords do not match');
         return;
       }
 

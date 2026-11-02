@@ -32,15 +32,7 @@ public class OwnedListController {
     @Autowired
     private GameService gameService;
 
-    @PostMapping("/owned-list/new")
-    public void addGameList(@RequestBody OwnedList ownedList) {
-        this.ownedListService.addToOwnedList(ownedList);
-    }
 
-    @GetMapping("/owned-list")
-    public List<OwnedList> getOwnedList() {
-        return this.ownedListService.getOwnedList();
-    }
 
     @PostMapping("/user/{userId}/ownedlist/add/{gameId}")
     public ResponseEntity<OwnedList> addToOwnedList(@PathVariable Long userId, @PathVariable Long gameId) {
@@ -55,10 +47,6 @@ public class OwnedListController {
         }
     }
 
-    @DeleteMapping("owned-list/delete/{id}")
-    public void removeFromOwnedList(@PathVariable Long id) {
-        this.ownedListService.removeFromOwnedList(id);
-    }
 
     @GetMapping("/user/{userId}/ownedlist")
     public ResponseEntity<List<OwnedList>> getWishListByUserId(@PathVariable Long userId) {
