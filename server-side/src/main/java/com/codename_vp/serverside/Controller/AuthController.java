@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.codename_vp.serverside.Component.JwtTokenUtil;
 import com.codename_vp.serverside.Entity.AuthRequest;
 import com.codename_vp.serverside.Service.LoginService;
@@ -24,9 +26,9 @@ public class AuthController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
-        // Throws a 401 or 404 response unless the credentials are valid
-        loginService.loginUser(authRequest.getUsername(), authRequest.getPassword());
+    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
+        // Throws a 401 or 429 response unless the credentials are valid
+        loginService.loginUser(authRequest.getUsername(), authRequest.getPassword(), request.getRemoteAddr());
         String token = jwtTokenUtil.generateToken(authRequest.getUsername());
         return ResponseEntity.ok(token);
     }
