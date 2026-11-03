@@ -35,6 +35,8 @@ const Login = () => {
         navigate('/user-detail')
         location.reload();
        
+      } else if (response.status === 429) {
+        alert("Too many failed attempts. Please wait 15 minutes and try again.")
       } else {
         console.log("Username or password is incorrect.")
         alert("Username or password is incorrect.")
