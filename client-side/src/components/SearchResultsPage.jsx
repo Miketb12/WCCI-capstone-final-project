@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -22,7 +23,7 @@ function SearchResults( ) {
     }
     let ignore = false; // Drop the response if a newer search has started.
 
-    axios.get(`http://localhost:7098/game/search?query=${encodeURIComponent(query)}`)
+    axios.get(`${API_URL}/game/search?query=${encodeURIComponent(query)}`)
       .then((response) => {
         if (!ignore) {
           setResult({ query, results: response.data.results, error: null });

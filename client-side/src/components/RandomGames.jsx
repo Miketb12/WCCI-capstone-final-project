@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "./Slider"; // Import the Slider component
@@ -48,7 +49,7 @@ function RandomGames() {
 
   useEffect(() => {
     // Define the URL of your backend API to fetch random games
-    const apiUrl = "http://localhost:7098/game/detail"; // Adjust the API endpoint as needed
+    const apiUrl = `${API_URL}/game/detail`; // Adjust the API endpoint as needed
 
     // Generate 10 random gameIds between 1 and 1000 (adjust the range as needed)
     const getRandomGameId = () => Math.floor(Math.random() * 400000) + 1;

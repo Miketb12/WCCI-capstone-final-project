@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import '../components/ListPage.css'
@@ -13,7 +14,7 @@ const WishList = () => {
   useEffect(() => {
     if (authToken) {
       const localUserId = localStorage.getItem('userId');
-      const baseUrl = `http://localhost:7098/user/${localUserId}/wishlist`;
+      const baseUrl = `${API_URL}/user/${localUserId}/wishlist`;
       fetch(baseUrl, {
         method: 'GET',
         headers: {

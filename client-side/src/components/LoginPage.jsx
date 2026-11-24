@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 
 import { useState } from 'react';
 import './LoginPage.module.css';
@@ -8,7 +9,7 @@ const Login = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const url = 'http://localhost:7098/login';
+  const url = `${API_URL}/login`;
 
   const handleLogin = async (e) => {
     e.preventDefault();

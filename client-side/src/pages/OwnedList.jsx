@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../components/ListPage.css";
@@ -12,7 +13,7 @@ const OwnedList = () => {
   useEffect(() => {
     if (authToken) {
       const localUserId = localStorage.getItem("userId");
-      const baseUrl = `http://localhost:7098/user/${localUserId}/ownedlist`;
+      const baseUrl = `${API_URL}/user/${localUserId}/ownedlist`;
       fetch(baseUrl, {
         method: "GET",
         headers: {

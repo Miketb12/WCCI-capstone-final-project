@@ -1,10 +1,10 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
 function AddToListButton({ gameId, userId, authToken, actionType }) {
   const [isAdded, setIsAdded] = useState(false);
-  const baseUrl = 'http://localhost:7098';
   const [isInOwnedList, setIsInOwnedList] = useState(false);
   const [isInWishList, setIsInWishList] = useState(false);
 
@@ -12,7 +12,7 @@ function AddToListButton({ gameId, userId, authToken, actionType }) {
     // Check if the game is already in the owned list
     if (actionType === 'addToOwnedList') {
       axios
-        .get(`${baseUrl}/user/check-in-lists/${userId}/${gameId}`, {
+        .get(`${API_URL}/user/check-in-lists/${userId}/${gameId}`, {
           headers: {
             'Authorization': `Bearer ${authToken}`,
           },
@@ -28,7 +28,7 @@ function AddToListButton({ gameId, userId, authToken, actionType }) {
     // Check if the game is already in the wish list
     if (actionType === 'addToWishList') {
       axios
-        .get(`${baseUrl}/user/check-in-lists/${userId}/${gameId}`, {
+        .get(`${API_URL}/user/check-in-lists/${userId}/${gameId}`, {
           headers: {
             'Authorization': `Bearer ${authToken}`,
           },
@@ -54,8 +54,8 @@ function AddToListButton({ gameId, userId, authToken, actionType }) {
 
     const endpoint =
       actionType === 'addToWishList'
-        ? `${baseUrl}/user/add-to-wish-list/${gameId}?userId=${userId}`
-        : `${baseUrl}/user/add-to-owned-list/${gameId}?userId=${userId}`;
+        ? `${API_URL}/user/add-to-wish-list/${gameId}?userId=${userId}`
+        : `${API_URL}/user/add-to-owned-list/${gameId}?userId=${userId}`;
 
     // Make an API request to add the game to the corresponding list
     axios

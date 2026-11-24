@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState } from 'react';
 
 function GameList() {
@@ -6,7 +7,7 @@ function GameList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:7098/game/top_games';
+    const apiUrl = `${API_URL}/game/top_games`;
 
     fetch(apiUrl)
     .then((response) => {

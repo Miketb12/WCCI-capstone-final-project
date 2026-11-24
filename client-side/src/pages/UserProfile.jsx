@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import RemoveFromWishlistButton from "../components/RemoveFromWishListButton";
@@ -24,7 +25,7 @@ const UserProfile = () => {
     const localUserId = localStorage.getItem("userId");
 
     if (authToken) {
-      fetch(`http://localhost:7098/user/id/${localUserId}`, {
+      fetch(`${API_URL}/user/id/${localUserId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -247,7 +248,7 @@ export default UserProfile;
 //     const userId = localStorage.getItem('userId');
 
 //     if (authToken) {
-//       fetch(`http://localhost:7098/user/id/${userId}`, {
+//       fetch(`${API_URL}/user/id/${userId}`, {
 //         method: 'GET',
 //         headers: {
 //           'Authorization': `Bearer ${authToken}`,

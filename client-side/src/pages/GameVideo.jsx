@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from "react";
 import "./GameVideo.css";
 
@@ -18,7 +19,7 @@ function GameVideo() {
 
         while (!videoUrl && retries > 0) {
           const randomGameId = Math.floor(Math.random() * 400000) + 1; // Generate a random game ID
-          const gameAPI = `http://localhost:7098/game/video/${randomGameId}`;
+          const gameAPI = `${API_URL}/game/video/${randomGameId}`;
           const videoResponse = await fetch(gameAPI);
 
           if (videoResponse.ok) {

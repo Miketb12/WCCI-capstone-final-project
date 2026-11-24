@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 
@@ -6,7 +7,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const url = 'http://localhost:7098/register';
+  const url = `${API_URL}/register`;
   const navigate = useNavigate();
 
   const handleSignup = async () => {

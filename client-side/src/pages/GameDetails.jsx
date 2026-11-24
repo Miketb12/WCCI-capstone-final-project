@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AddToListButton from "../components/AddToLisButton";
@@ -19,8 +20,8 @@ function GameInfoDetails() {
 
 
   useEffect(() => {
-    const gameAPI = `http://localhost:7098/game/detail/${gameId}`;
-    const videoAPI = `http://localhost:7098/game/video/${gameId}`;
+    const gameAPI = `${API_URL}/game/detail/${gameId}`;
+    const videoAPI = `${API_URL}/game/video/${gameId}`;
     const fetchGameWithRetry = async () => {
       try {
         const response = await fetch(gameAPI);

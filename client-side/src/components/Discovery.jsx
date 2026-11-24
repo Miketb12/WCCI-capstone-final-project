@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Slider from "./Slider"; // Import the Slider component
@@ -46,7 +47,7 @@ function DiscoverySearch() {
 
   useEffect(() => {
     // Define the URL of your backend API
-    const apiUrl = "http://localhost:7098/game/top_games";
+    const apiUrl = `${API_URL}/game/top_games`;
 
     fetch(apiUrl)
       .then((response) => {
