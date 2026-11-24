@@ -94,6 +94,8 @@ npm run dev
 
 Then open [http://localhost:5173](http://localhost:5173).
 
+The client calls the API at `http://localhost:7098` by default. To point it somewhere else, copy `client-side/.env.example` to `client-side/.env` and change `VITE_API_URL`.
+
 ### Test accounts
 
 The server creates three accounts at startup that you can log in with: `abc123`, `def123` and `hijk123`, each with the password `1234`.
