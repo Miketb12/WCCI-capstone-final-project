@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const clearSession = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("userName");
@@ -17,19 +15,4 @@ export const setupAuth = () => {
   if (localStorage.getItem("authToken") === "undefined") {
     clearSession();
   }
-
-  axios.interceptors.request.use((config) => {
-    const authToken = localStorage.getItem("authToken");
-    if (authToken) {
-      config.headers.Authorization = `Bearer ${authToken}`;
-    }
-    return config;
-  });
-
-  axios.interceptors.response.use(undefined, (error) => {
-    if (error.response?.status === 401) {
-      handleUnauthorized();
-    }
-    return Promise.reject(error);
-  });
 };
