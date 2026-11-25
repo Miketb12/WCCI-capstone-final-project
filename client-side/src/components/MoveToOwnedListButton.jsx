@@ -1,12 +1,12 @@
-import axios from 'axios';
+import api from '../api';
 import PropTypes from 'prop-types';
 import './Buttons.css'
 
 const MoveToOwnedListButton = ({ userId, wishListId, onMove }) => {
   const handleMoveToOwnedList = () => {
     // Make a POST request to move the item from wish list to owned list
-    axios
-      .post(`http://localhost:7098/user/${userId}/moveToOwnedList/${wishListId}`)
+    api
+      .post(`/user/${userId}/moveToOwnedList/${wishListId}`)
       .then(() => {
         // If the request is successful, trigger the `onMove` callback
         onMove(wishListId);

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
+import api from '../api';
 import { useState, useEffect } from "react";
 import RemoveFromWishlistButton from "../components/RemoveFromWishListButton";
 import RemoveFromOwnedListButton from "../components/RemoveFromOwnedListButton";
 import MoveToOwnedListButton from "../components/MoveToOwnedListButton";
 import "../components/Buttons.css";
-import { handleUnauthorized } from "../auth";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -24,23 +24,9 @@ const UserProfile = () => {
     const localUserId = localStorage.getItem("userId");
 
     if (authToken) {
-      fetch(`http://localhost:7098/user/id/${localUserId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-        .then((response) => {
-          if (response.status === 401) {
-            handleUnauthorized();
-          }
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Failed to fetch user details");
-          }
-        })
-        .then((userData) => {
+      api
+        .get(`/user/id/${localUserId}`)
+        .then(({ data: userData }) => {
           setUser(userData);
           setExpandedDescriptions(
             new Array(

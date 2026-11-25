@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import api from '../api';
 import { useNavigate } from 'react-router-dom'
 
 const SignupPage = () => {
@@ -6,7 +7,6 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const url = 'http://localhost:7098/register';
   const navigate = useNavigate();
 
   const handleSignup = async () => {
@@ -19,15 +19,13 @@ const SignupPage = () => {
       }
 
       // Make a POST request to your backend API to create a new user account
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({userName, password, email }),
-      });
+      const response = await api.post(
+        '/register',
+        { userName, password, email },
+        { validateStatus: () => true }
+      );
 
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         console.log('Registration successful');
         alert("You have registered successful, please login!")
         navigate('/login')

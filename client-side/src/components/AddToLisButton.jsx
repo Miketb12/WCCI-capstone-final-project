@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import PropTypes from 'prop-types';
 
 function AddToListButton({ gameId, userId, authToken, actionType }) {
   const [isAdded, setIsAdded] = useState(false);
-  const baseUrl = 'http://localhost:7098';
   const [isInOwnedList, setIsInOwnedList] = useState(false);
   const [isInWishList, setIsInWishList] = useState(false);
 
   useEffect(() => {
     // Check if the game is already in the owned list
     if (actionType === 'addToOwnedList') {
-      axios
-        .get(`${baseUrl}/user/check-in-lists/${userId}/${gameId}`, {
-          headers: {
-            'Authorization': `Bearer ${authToken}`,
-          },
-        })
+      api
+        .get(`/user/check-in-lists/${userId}/${gameId}`)
         .then((response) => {
           setIsInOwnedList(response.data.isInOwnedList);
         })
@@ -27,12 +22,8 @@ function AddToListButton({ gameId, userId, authToken, actionType }) {
 
     // Check if the game is already in the wish list
     if (actionType === 'addToWishList') {
-      axios
-        .get(`${baseUrl}/user/check-in-lists/${userId}/${gameId}`, {
-          headers: {
-            'Authorization': `Bearer ${authToken}`,
-          },
-        })
+      api
+        .get(`/user/check-in-lists/${userId}/${gameId}`)
         .then((response) => {
           setIsInWishList(response.data.isInWishList);
           setIsInOwnedList(response.data.isInOwnedList);
@@ -54,16 +45,12 @@ function AddToListButton({ gameId, userId, authToken, actionType }) {
 
     const endpoint =
       actionType === 'addToWishList'
-        ? `${baseUrl}/user/add-to-wish-list/${gameId}?userId=${userId}`
-        : `${baseUrl}/user/add-to-owned-list/${gameId}?userId=${userId}`;
+        ? `/user/add-to-wish-list/${gameId}?userId=${userId}`
+        : `/user/add-to-owned-list/${gameId}?userId=${userId}`;
 
     // Make an API request to add the game to the corresponding list
-    axios
-      .post(endpoint, {}, {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-        },
-      })
+    api
+      .post(endpoint, {})
       .then((response) => {
         if (response.status === 200) {
           setIsAdded(true);

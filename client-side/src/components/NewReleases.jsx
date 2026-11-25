@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import api from '../api';
 import { Link } from "react-router-dom";
 import Slider from "./Slider"; // Import the Slider component
 import "slick-carousel/slick/slick.css";
@@ -46,15 +47,9 @@ function NewReleases() {
 
   useEffect(() => {
     // Define the URL of your backend API
-    const apiUrl = "http://localhost:7098/game/new_games";
 
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+    api.get('/game/new_games')
+      .then((response) => response.data)
       .then((data) => {
         if (data.results && Array.isArray(data.results)) {
           setData(data.results);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import PropTypes from 'prop-types';
 import { useSearchParams } from 'react-router-dom';
 import './SearchResultsPage.css'
@@ -22,7 +22,7 @@ function SearchResults( ) {
     }
     let ignore = false; // Drop the response if a newer search has started.
 
-    axios.get(`http://localhost:7098/game/search?query=${encodeURIComponent(query)}`)
+    api.get(`/game/search?query=${encodeURIComponent(query)}`)
       .then((response) => {
         if (!ignore) {
           setResult({ query, results: response.data.results, error: null });

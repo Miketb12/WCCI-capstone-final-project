@@ -1,4 +1,5 @@
 
+import api from '../api';
 import { useState } from 'react';
 import './LoginPage.module.css';
 import { useNavigate } from 'react-router-dom'
@@ -8,22 +9,19 @@ const Login = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const url = 'http://localhost:7098/login';
 
   const handleLogin = async (e) => {
     e.preventDefault();
     // Make an API request to your Spring Boot backend here
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userName, password }),
-      });
+      const response = await api.post(
+        '/login',
+        { userName, password },
+        { validateStatus: () => true }
+      );
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status >= 200 && response.status < 300) {
+        const data = response.data;
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('userId', data.id);
         localStorage.setItem('userName', data.userName);

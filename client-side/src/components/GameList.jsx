@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import api from '../api';
 
 function GameList() {
   const [games, setGames] = useState([]);
@@ -6,15 +7,9 @@ function GameList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:7098/game/top_games';
 
-    fetch(apiUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
+    api.get('/game/top_games')
+    .then((response) => response.data)
     .then((data) => {
       if (data.results && Array.isArray(data.results)) {
         setGames(data.results);

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from '../api';
 import { useParams } from "react-router-dom";
 import AddToListButton from "../components/AddToLisButton";
 import './GameDetails.css';
@@ -19,15 +20,11 @@ function GameInfoDetails() {
 
 
   useEffect(() => {
-    const gameAPI = `http://localhost:7098/game/detail/${gameId}`;
-    const videoAPI = `http://localhost:7098/game/video/${gameId}`;
+    const gameAPI = `/game/detail/${gameId}`;
+    const videoAPI = `/game/video/${gameId}`;
     const fetchGameWithRetry = async () => {
       try {
-        const response = await fetch(gameAPI);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok for gameId ${gameId}`);
-        }
-        const gameData = await response.json();
+        const { data: gameData } = await api.get(gameAPI);
         if (gameData.id) {
           setGame(gameData);
           setLoading(false);
@@ -45,11 +42,7 @@ function GameInfoDetails() {
     // Function to fetch the video URL
     const fetchVideoUrl = async () => {
       try {
-        const response = await fetch(videoAPI);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok for gameId ${gameId}`);
-        }
-        const responseData = await response.json();
+        const { data: responseData } = await api.get(videoAPI);
     
         console.log("Video API response:", responseData); // Debugging statement
     

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import api from '../api';
 import { Link } from "react-router-dom";
 import '../components/ListPage.css'
-import { handleUnauthorized } from '../auth';
 
 const WishList = () => {
   const [collection, setCollection] = useState([]);
@@ -13,23 +13,10 @@ const WishList = () => {
   useEffect(() => {
     if (authToken) {
       const localUserId = localStorage.getItem('userId');
-      const baseUrl = `http://localhost:7098/user/${localUserId}/wishlist`;
-      fetch(baseUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-        .then((response) => {
-          if (response.status === 401) {
-            handleUnauthorized();
-          }
-          if (!response.ok) {
-            throw new Error('Response is not right');
-          }
-          return response.json();
-        })
-        .then(setCollection)
+      const baseUrl = `/user/${localUserId}/wishlist`;
+      api
+        .get(baseUrl)
+        .then((response) => setCollection(response.data))
         .catch((error) => {
           console.error('Error fetching data:', error);
         });

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import api from '../api';
 
 function useGameDetails(gameId) {
   const [game, setGame] = useState(null);
@@ -7,16 +8,12 @@ function useGameDetails(gameId) {
 
   useEffect(() => {
     // Define the URL of your backend API to fetch game details
-    const apiUrl = `http://localhost:7098/game-detail/${gameId}`; // Adjust the API endpoint as needed
+    const apiUrl = `/game-detail/${gameId}`;
 
     // Function to fetch game details
     const fetchGameDetails = async () => {
       try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const gameData = await response.json();
+        const { data: gameData } = await api.get(apiUrl);
         setGame(gameData);
         setLoading(false);
       } catch (error) {

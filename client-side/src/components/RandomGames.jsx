@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from '../api';
 import { Link } from "react-router-dom";
 import Slider from "./Slider"; // Import the Slider component
 import "slick-carousel/slick/slick.css";
@@ -48,7 +49,7 @@ function RandomGames() {
 
   useEffect(() => {
     // Define the URL of your backend API to fetch random games
-    const apiUrl = "http://localhost:7098/game/detail"; // Adjust the API endpoint as needed
+    const apiUrl = "/game/detail";
 
     // Generate 10 random gameIds between 1 and 1000 (adjust the range as needed)
     const getRandomGameId = () => Math.floor(Math.random() * 400000) + 1;
@@ -59,11 +60,7 @@ function RandomGames() {
     // Function to fetch a game with retries
     const fetchGameWithRetry = async (gameId, retries) => {
       try {
-        const response = await fetch(`${apiUrl}/${gameId}`);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok for gameId ${gameId}`);
-        }
-        const game = await response.json();
+        const { data: game } = await api.get(`${apiUrl}/${gameId}`);
         // Ensure the response is an object with game data
         if (game.id) {
           fetchedGames.push(game);
